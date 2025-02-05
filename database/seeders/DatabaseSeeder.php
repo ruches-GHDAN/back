@@ -21,6 +21,14 @@ class DatabaseSeeder extends Seeder
     {
         $users = User::factory(5)->create();
 
+        User::factory()->create([
+            'firstName' => 'Admin',
+            'lastName' => 'Admin',
+            'role' => 'admin',
+            'email' => 'admin@example.com',
+            'password' => bcrypt('password')
+        ]);
+
         $users->each(function ($user) {
             $apiaries = Apiary::factory(2)->create(['user_id' => $user->id]);
 
