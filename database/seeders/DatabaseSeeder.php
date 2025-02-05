@@ -8,6 +8,7 @@ use App\Models\Disease;
 use App\Models\Food;
 use App\Models\Harvest;
 use App\Models\Hive;
+use App\Models\Stock;
 use App\Models\Transhumance;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -30,6 +31,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $users->each(function ($user) {
+            $user->stocks()->saveMany(Stock::factory(3)->make());
             $apiaries = Apiary::factory(2)->create(['user_id' => $user->id]);
 
             $apiaries->each(function ($apiary) {

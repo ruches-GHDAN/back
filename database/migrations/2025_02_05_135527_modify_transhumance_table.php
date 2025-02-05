@@ -11,25 +11,24 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('hives', function (Blueprint $table) {
-            $table->id();
-            $table->integer('registration');
-            $table->string('status');
-            $table->integer('size');
-            $table->string('race');
-            $table->integer('queenYear');
-            $table->integer('temperature');
+        Schema::table('transhumances', function (Blueprint $table) {
+            $table->dropColumn('locate');
             $table->double('latitude');
             $table->double('longitude');
-            $table->timestamps();
         });
     }
 
     /**
      * Reverse the migrations.
+     *
+     * @return void
      */
     public function down(): void
     {
-        Schema::dropIfExists('hives');
+        Schema::table('transhumances', function (Blueprint $table) {
+            $table->string('locate');
+            $table->dropColumn('oldLatitude');
+            $table->dropColumn('oldLongitude');
+        });
     }
 };
