@@ -30,6 +30,10 @@ class User extends Authenticatable
         return $this->hasMany(Apiary::class);
     }
 
+    public function stocks()
+    {
+        return $this->hasMany(Stock::class);
+    }
 
     /**
      * The attributes that should be hidden for serialization.

@@ -11,16 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('hives', function (Blueprint $table) {
+        Schema::create('stocks', function (Blueprint $table) {
             $table->id();
-            $table->integer('registration');
-            $table->string('status');
-            $table->integer('size');
-            $table->string('race');
-            $table->integer('queenYear');
-            $table->integer('temperature');
-            $table->double('latitude');
-            $table->double('longitude');
+            $table->string('type');
+            $table->integer('nbToClean');
+            $table->integer('nbClean');
+            $table->integer('nbInUse');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -30,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('hives');
+        Schema::dropIfExists('stocks');
     }
 };

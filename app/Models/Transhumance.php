@@ -9,7 +9,7 @@ class Transhumance extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['locate', 'reason', 'date'];
+    protected $fillable = ['oldLatitude', 'oldLongitude', 'reason', 'date'];
 
     public function apiaries()
     {

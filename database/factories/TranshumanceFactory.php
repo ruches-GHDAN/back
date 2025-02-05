@@ -17,7 +17,8 @@ class TranshumanceFactory extends Factory
     public function definition(): array
     {
         return [
-            'locate' => $this->faker->city,
+            'latitude' => $this->faker->latitude(),
+            'longitude' => $this->faker->longitude(),
             'reason' => $this->faker->sentence,
             'date' => $this->faker->date,
         ];
