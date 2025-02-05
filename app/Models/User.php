@@ -25,6 +25,12 @@ class User extends Authenticatable
         'password',
     ];
 
+    public function apiaries()
+    {
+        return $this->hasMany(Apiary::class);
+    }
+
+
     /**
      * The attributes that should be hidden for serialization.
      *
