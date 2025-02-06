@@ -4,6 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ApiaryController;
+use App\Http\Controllers\HiveController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,4 +24,16 @@ Route::get('/logout', [AuthController::class, 'logout'])->middleware('auth:sanct
 
 Route::group(['prefix' => 'users', 'middleware' => 'auth:sanctum'], function () {
     Route::get('/profile', [UserController::class, 'profile']);
+});
+
+Route::group(['prefix' => 'apiary', 'middleware' => 'auth:sanctum'], function () {
+    Route::post('/create', [ApiaryController::class, 'create']);
+    Route::patch('/update/{id}', [ApiaryController::class, 'update']);
+    Route::delete('/delete/{id}', [ApiaryController::class, 'delete']);
+});
+
+Route::group(['prefix' => 'hive', 'middleware' => 'auth:sanctum'], function () {
+    Route::post('/create', [HiveController::class, 'create']);
+    Route::patch('/update/{id}', [HiveController::class, 'update']);
+    Route::delete('/delete/{id}', [HiveController::class, 'delete']);
 });

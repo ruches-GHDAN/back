@@ -9,7 +9,13 @@ class Apiary extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['latitude', 'longitude', 'temperature'];
+    protected $fillable = [
+        'name',
+        'latitude',
+        'longitude',
+        'temperature',
+        'user_id'
+    ];
 
     public function user()
     {
