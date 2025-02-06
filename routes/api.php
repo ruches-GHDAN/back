@@ -27,6 +27,8 @@ Route::group(['prefix' => 'apiary', 'middleware' => 'auth:sanctum'], function ()
     Route::get('/getAllLocation/{id}', [ApiaryController::class, 'getAllLocation']);
     Route::get('/status/{id}', [ApiaryController::class, 'status']);
     Route::get('/hasSickHive/{id}', [ApiaryController::class, 'hasSickHive']);
+    Route::get('/honeyQuantity/{id}', [ApiaryController::class, 'honeyQuantity']);
+    Route::post('/recentlyTranshumed/{id}', [ApiaryController::class, 'recentlyTranshumed']);
 });
 
 Route::group(['prefix' => 'hive', 'middleware' => 'auth:sanctum'], function () {
