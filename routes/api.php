@@ -1,9 +1,9 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\ApiaryController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\HiveController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,10 +16,22 @@ use App\Http\Controllers\UserController;
 |
 */
 
-Route::post('/register', [AuthController::class, 'register'])->name('register');
-Route::post('/login', [AuthController::class, 'login'])->name('login');
-Route::get('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum')->name('logout');
-
-Route::group(['prefix' => 'users', 'middleware' => 'auth:sanctum'], function () {
+Route::group(['prefix' => 'user', 'middleware' => 'auth:sanctum'], function () {
     Route::get('/profile', [UserController::class, 'profile']);
 });
+
+Route::group(['prefix' => 'apiary', 'middleware' => 'auth:sanctum'], function () {
+    Route::get('/about/{id}', [ApiaryController::class, 'about']);
+    Route::get('/nbApiaries/{id}', [ApiaryController::class, 'nbApiaries']);
+    Route::get('/nbHives/{id}', [ApiaryController::class, 'nbHives']);
+    Route::get('/getAllLocation/{id}', [ApiaryController::class, 'getAllLocation']);
+    Route::get('/status/{id}', [ApiaryController::class, 'status']);
+    Route::get('/hasSickHive/{id}', [ApiaryController::class, 'hasSickHive']);
+});
+
+Route::group(['prefix' => 'hive', 'middleware' => 'auth:sanctum'], function () {
+    Route::get('/about/{id}', [HiveController::class, 'about']);
+    Route::get('/isSick/{id}', [HiveController::class, 'isSick']);
+    Route::get('/wasSick/{id}', [HiveController::class, 'wasSick']);
+});
+
