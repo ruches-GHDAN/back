@@ -18,7 +18,7 @@ class HiveFactory extends Factory
     {
         return [
             'registration' => $this->faker->randomNumber(5),
-            'status' => $this->faker->randomElement(['active', 'inactive', 'maintenance']),
+            'status' => $this->faker->randomElement(['in_use', 'in_stock']),
             'size' => $this->faker->numberBetween(1, 10),
             'race' => $this->faker->word,
             'queenYear' => $this->faker->year,

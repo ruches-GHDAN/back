@@ -17,6 +17,7 @@ class ApiaryFactory extends Factory
     public function definition(): array
     {
         return [
+            'name' => $this->faker->name(),
             'latitude' => $this->faker->latitude(),
             'longitude' => $this->faker->longitude(),
             'temperature' => $this->faker->numberBetween(-10, 40),
