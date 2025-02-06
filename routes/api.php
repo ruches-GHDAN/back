@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\ApiaryController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ApiaryController;
 use App\Http\Controllers\HiveController;
 
 /*
@@ -21,6 +21,9 @@ Route::group(['prefix' => 'user', 'middleware' => 'auth:sanctum'], function () {
 });
 
 Route::group(['prefix' => 'apiary', 'middleware' => 'auth:sanctum'], function () {
+    Route::post('/create', [ApiaryController::class, 'create']);
+    Route::patch('/update/{id}', [ApiaryController::class, 'update']);
+    Route::delete('/delete/{id}', [ApiaryController::class, 'delete']);
     Route::get('/about/{id}', [ApiaryController::class, 'about']);
     Route::get('/nbApiaries/{id}', [ApiaryController::class, 'nbApiaries']);
     Route::get('/nbHives/{id}', [ApiaryController::class, 'nbHives']);
@@ -32,6 +35,9 @@ Route::group(['prefix' => 'apiary', 'middleware' => 'auth:sanctum'], function ()
 });
 
 Route::group(['prefix' => 'hive', 'middleware' => 'auth:sanctum'], function () {
+    Route::post('/create', [HiveController::class, 'create']);
+    Route::patch('/update/{id}', [HiveController::class, 'update']);
+    Route::delete('/delete/{id}', [HiveController::class, 'delete']);
     Route::get('/about/{id}', [HiveController::class, 'about']);
     Route::get('/isSick/{id}', [HiveController::class, 'isSick']);
     Route::get('/wasSick/{id}', [HiveController::class, 'wasSick']);
