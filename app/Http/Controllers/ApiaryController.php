@@ -59,12 +59,12 @@ class ApiaryController extends Controller
     {
         $apiary = Apiary::findOrFail($idApiary);
 
-        $statusInUse = $apiary->hives()->where('status', 'in_use')->count();
-        $statusInStock = $apiary->hives()->where('status', 'in_stock')->count();
+        $statusInUse = $apiary->hives()->where('status', 'inUse')->count();
+        $statusInStock = $apiary->hives()->where('status', 'inStock')->count();
 
         $status = [
-            'in_use' => $statusInUse,
-            'in_stock' => $statusInStock
+            'inUse' => $statusInUse,
+            'inStock' => $statusInStock
         ];
 
         return response()->json([
