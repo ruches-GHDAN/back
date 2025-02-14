@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ApiaryController;
 use App\Http\Controllers\HiveController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\WeatherController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,3 +45,10 @@ Route::group(['prefix' => 'hive', 'middleware' => 'auth:sanctum'], function () {
     Route::get('/wasSick/{id}', [HiveController::class, 'wasSick']);
 });
 
+Route::group(['prefix' => 'dashboard', 'middleware' => 'auth:sanctum'], function () {
+    Route::get('/globalDetail/{id}', [DashboardController::class, 'globalDetail']);
+});
+
+Route::group(['prefix' => 'weather', 'middleware' => 'auth:sanctum'], function () {
+    Route::post('/getWeather', [WeatherController::class, 'getWeather']);
+});

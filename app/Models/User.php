@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class User extends Authenticatable
 {
@@ -33,6 +34,14 @@ class User extends Authenticatable
     public function stocks()
     {
         return $this->hasMany(Stock::class);
+    }
+
+    public function hives(): HasManyThrough {
+        return $this->hasManyThrough(Hive::class, Apiary::class);
+    }
+
+    public function harvests(): HasManyThrough {
+        return $this->hasManyThrough(Harvest::class, Apiary::class);
     }
 
     /**
