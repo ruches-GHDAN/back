@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('hives', function (Blueprint $table) {
-            $table->foreignId('apiary_id')->constrained()->onDelete('cascade'); // Ajout de la clé étrangère
+            $table->foreignId('apiary_id')->constrained()->onDelete('cascade');
         });
     }
 

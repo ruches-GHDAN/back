@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Apiary;
 use App\Models\Hive;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -50,7 +49,7 @@ class HiveController extends Controller
             'temperature' => 'integer',
             'latitude' => 'numeric',
             'longitude' => 'numeric',
-            'apiary_id' => 'required|exists:apiaries,id',
+            'apiary_id' => 'exists:apiaries,id',
         ]);
 
         $hive = Hive::find($id);

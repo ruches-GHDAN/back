@@ -45,11 +45,8 @@ class DatabaseSeeder extends Seeder
                     $hive->foods()->attach($foods->pluck('id'));
                 });
 
-                $harvests = Harvest::factory(2)->create();
-                $transhumances = Transhumance::factory(2)->create();
-
-                $apiary->harvests()->attach($harvests->pluck('id'));
-                $apiary->transhumances()->attach($transhumances->pluck('id'));
+                $apiary->harvests()->saveMany(Harvest::factory(2)->make(['apiary_id' => $apiary->id]));
+                $apiary->transhumances()->saveMany(Transhumance::factory(2)->make(['apiary_id' => $apiary->id]));
             });
         });
     }

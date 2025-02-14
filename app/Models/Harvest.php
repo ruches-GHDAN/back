@@ -9,10 +9,10 @@ class Harvest extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['date', 'quantity'];
+    protected $fillable = ['date', 'quantity', 'apiary_id'];
 
-    public function apiaries()
+    public function apiary()
     {
-        return $this->belongsToMany(Apiary::class);
+        return $this->belongsTo(Apiary::class);
     }
 }
