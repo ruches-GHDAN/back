@@ -16,12 +16,13 @@ class DashboardController extends Controller
 
         $nbHives = $user->hives()->count();
 
-        $honeyQuantity = $user->harvests()->count();
+        $honeyQuantity = $user->harvests()->sum('quantity');
 
         return response()->json([
             'nbApiary' => $nbApiary,
             'nbHives' => $nbHives,
-            'honeyQuantity' => $honeyQuantity
+            'honeyQuantity' => $honeyQuantity,
+            'nbAlertes' => 0
         ]);
     }
 }
