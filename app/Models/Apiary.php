@@ -24,12 +24,12 @@ class Apiary extends Model
 
     public function harvests()
     {
-        return $this->belongsToMany(Harvest::class);
+        return $this->hasMany(Harvest::class);
     }
 
     public function transhumances()
     {
-        return $this->belongsToMany(Transhumance::class);
+        return $this->hasMany(Transhumance::class);
     }
 
     public function hives()
