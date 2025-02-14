@@ -42,8 +42,7 @@ class AuthController extends Controller
                         'id' => $user->id,
                         'firstName' => $user->firstName,
                         'lastName' => $user->lastName,
-                        'email' => $user->email,
-                        'city' => $user->city
+                        'email' => $user->email
                     ]
                 ]);
 

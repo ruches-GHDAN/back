@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Apiary;
+use App\Models\User;
+use DateTime;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -67,5 +70,112 @@ class ApiaryController extends Controller
         $apiary->delete();
 
         return response()->json(['message' => 'Le rucher a bien été supprimé'], 200);
+    }
+    public function about(int $idApiary): JsonResponse
+    {
+        $apiary = Apiary::findOrFail($idApiary);
+
+        $nbHives = $this->nbHives($idApiary);
+
+        return response()->json([
+            'apiary' => $apiary,
+            'nbHives' => $nbHives
+        ]);
+    }
+
+    public function nbApiaries(int $idUser): JsonResponse
+    {
+        $user = User::findOrFail($idUser);
+
+        $nbApiaries = $user->apiaries()->count();
+
+        return response()->json([
+            'nbApiaries' => $nbApiaries
+        ]);
+    }
+
+    public function nbHives(int $idApiary): JsonResponse
+    {
+        $apiary = Apiary::findOrFail($idApiary);
+
+        $nbHives = $apiary->hives()->count();
+
+        return response()->json([
+            'nbHives' => $nbHives
+        ]);
+    }
+
+    public function getAllLocation(int $idUser):JsonResponse
+    {
+        $user = User::findOrFail($idUser);
+
+        $locations = $user->apiaries()->select('latitude', 'longitude')->get();
+
+        return response()->json([
+            'locations' => $locations
+        ]);
+    }
+
+    public function status(int $idApiary): JsonResponse
+    {
+        $apiary = Apiary::findOrFail($idApiary);
+
+        $statusInUse = $apiary->hives()->where('status', 'in_use')->count();
+        $statusInStock = $apiary->hives()->where('status', 'in_stock')->count();
+
+        $status = [
+            'in_use' => $statusInUse,
+            'in_stock' => $statusInStock
+        ];
+
+        return response()->json([
+            'status' => $status
+        ]);
+    }
+
+    public function hasSickHive(int $idApiary): JsonResponse
+    {
+        $apiary = Apiary::findOrFail($idApiary);
+
+        $sickHive = $apiary->hives()->whereHas('diseases', function ($query) {
+            $query->whereNull('dateEnd');
+        })->exists();
+
+        return response()->json([
+            'sickHive' => $sickHive
+        ]);
+    }
+
+    public function honeyQuantity(int $idApiary): JsonResponse
+    {
+        $apiary = Apiary::findOrFail($idApiary);
+
+        $honeyQuantity = $apiary->harvests()->sum('quantity');
+
+        return response()->json([
+            'honeyQuantity' => $honeyQuantity
+        ]);
+    }
+
+    public function recentlyTranshumed(Request $request, int $idApiary): JsonResponse
+    {
+        $apiary = Apiary::findOrFail($idApiary);
+
+        $startDate = $request->input('startDate');
+        $endDate = $request->input('endDate');
+
+        if ($startDate == null || $endDate == null) {
+            $transhumedDates = $apiary->transhumances()
+            ->pluck('date');
+        }
+        else {
+            $transhumedDates = $apiary->transhumances()
+            ->whereBetween('date', [$startDate, $endDate])
+            ->pluck('date');
+        }
+
+        return response()->json([
+            'transhumedDates' => $transhumedDates
+        ]);
     }
 }
