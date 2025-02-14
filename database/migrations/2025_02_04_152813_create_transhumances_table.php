@@ -13,9 +13,11 @@ return new class extends Migration
     {
         Schema::create('transhumances', function (Blueprint $table) {
             $table->id();
-            $table->string('locate');
+            $table->string('oldLatitude');
+            $table->string('oldLongitude');
             $table->string('reason');
             $table->date('date');
+            $table->foreignId('apiary_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
