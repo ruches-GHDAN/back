@@ -30,6 +30,7 @@ define('DELETE_ROUTE', '/delete/{id}');
 Route::group(['prefix' => 'user', 'middleware' => AUTH], function () {
     Route::get('/profile', [UserController::class, 'profile']);
     Route::post('/apiaries', [UserController::class, 'apiaries']);
+    Route::post('/hives', [UserController::class, 'hives']);
 });
 
 Route::group(['prefix' => 'apiary', 'middleware' => AUTH], function () {
