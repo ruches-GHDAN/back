@@ -9,6 +9,7 @@ use App\Http\Controllers\WeatherController;
 use App\Http\Controllers\HarvestController;
 use App\Http\Controllers\TranshumanceController;
 use App\Http\Controllers\DiseaseController;
+use App\Http\Controllers\HistoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -72,4 +73,12 @@ Route::group(['prefix' => 'dashboard', 'middleware' => 'auth:sanctum'], function
 
 Route::group(['prefix' => 'weather', 'middleware' => 'auth:sanctum'], function () {
     Route::post('/getWeather', [WeatherController::class, 'getWeather']);
+});
+
+Route::group(['prefix' => 'history', 'middleware' => 'auth:sanctum'], function () {
+    Route::post('/create', [HistoryController::class, 'create']);
+    Route::post('/update/{id}', [HistoryController::class, 'update']);
+    Route::delete('/delete/{id}', [HistoryController::class, 'delete']);
+    Route::post('/getHistoryByApiary/{id}', [HistoryController::class, 'getHistoryByApiary']);
+    Route::post('/getHistoryByUser/{id}', [HistoryController::class, 'getHistoryByUser']);
 });

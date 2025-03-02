@@ -11,6 +11,7 @@ use App\Models\Hive;
 use App\Models\Stock;
 use App\Models\Transhumance;
 use App\Models\User;
+use App\Models\History;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -47,6 +48,7 @@ class DatabaseSeeder extends Seeder
 
                 $apiary->harvests()->saveMany(Harvest::factory(2)->make(['apiary_id' => $apiary->id]));
                 $apiary->transhumances()->saveMany(Transhumance::factory(2)->make(['apiary_id' => $apiary->id]));
+                $apiary->histories()->saveMany(History::factory(2)->make(['apiary_id' => $apiary->id]));
             });
         });
     }
