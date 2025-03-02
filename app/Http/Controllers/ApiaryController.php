@@ -71,6 +71,7 @@ class ApiaryController extends Controller
 
         return response()->json(['message' => 'Le rucher a bien été supprimé'], 200);
     }
+
     public function about(int $idApiary): JsonResponse
     {
         $apiary = Apiary::findOrFail($idApiary);

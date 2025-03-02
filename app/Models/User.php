@@ -44,6 +44,10 @@ class User extends Authenticatable
         return $this->hasManyThrough(Harvest::class, Apiary::class);
     }
 
+    public function histories(): HasManyThrough {
+        return $this->hasManyThrough(History::class, Apiary::class);
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *
