@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->date('date');
             $table->integer('quantity');
+            $table->foreignId('apiary_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

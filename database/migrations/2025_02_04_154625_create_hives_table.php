@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('hives', function (Blueprint $table) {
             $table->id();
             $table->integer('registration');
-            $table->string('status');
+            $table->enum('status', ['in_use', 'in_stock'])->default('in_use');
             $table->integer('size');
             $table->string('race');
             $table->integer('queenYear');

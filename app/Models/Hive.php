@@ -10,8 +10,15 @@ class Hive extends Model
     use HasFactory;
 
     protected $fillable = [
-        'registration', 'status', 'size', 'race',
-        'queenYear', 'temperature', 'latitude', 'longitude'
+        'registration',
+        'status',
+        'size',
+        'race',
+        'queenYear',
+        'temperature',
+        'latitude',
+        'longitude',
+        'apiary_id'
     ];
 
     public function apiary()

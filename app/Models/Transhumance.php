@@ -9,10 +9,16 @@ class Transhumance extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['oldLatitude', 'oldLongitude', 'reason', 'date'];
+    protected $fillable = [
+        'oldLatitude',
+        'oldLongitude',
+        'reason',
+        'date',
+        'apiary_id'
+    ];
 
-    public function apiaries()
+    public function apiary()
     {
-        return $this->belongsToMany(Apiary::class);
+        return $this->belongsTo(Apiary::class);
     }
 }
