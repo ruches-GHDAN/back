@@ -179,4 +179,9 @@ class ApiaryController extends Controller
             'transhumedDates' => $transhumedDates
         ]);
     }
+
+    public function locateHives(int $idApiary) {
+        $apiary = Apiary::findOrFail($idApiary);
+        return $apiary->hives()->select('longitude','latitude')->get();
+    }
 }
