@@ -45,6 +45,7 @@ Route::group(['prefix' => 'apiary', 'middleware' => AUTH], function () {
     Route::get('/hasSickHive/{id}', [ApiaryController::class, 'hasSickHive']);
     Route::get('/honeyQuantity/{id}', [ApiaryController::class, 'honeyQuantity']);
     Route::post('/recentlyTranshumed/{id}', [ApiaryController::class, 'recentlyTranshumed']);
+    Route::get('/locateHives/{id}', [ApiaryController::class, 'locateHives']);
 });
 
 Route::group(['prefix' => 'hive', 'middleware' => AUTH], function () {
