@@ -87,5 +87,5 @@ Route::group(['prefix' => 'history', 'middleware' => AUTH], function () {
     Route::post(UPDATE_ROUTE, [HistoryController::class, 'update']);
     Route::delete(DELETE_ROUTE, [HistoryController::class, 'delete']);
     Route::post('/getHistoryByApiary/{id}', [HistoryController::class, 'getHistoryByApiary']);
-    Route::post('/getHistoryByUser/{id}', [HistoryController::class, 'getHistoryByUser']);
+    Route::post('/getHistoryByUser', [HistoryController::class, 'getHistoryByUser']);
 });

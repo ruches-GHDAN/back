@@ -15,7 +15,28 @@ class UserController extends Controller
 
     public function apiaries(Request $request)
     {
-        return response()->json($request->user()->apiaries()->select('id', 'name')->get());
+        $user = $request->user();
+        $apiaries = $user->apiaries;
+
+        $apiaryData = $apiaries->map(function ($apiary) {
+            $idName = $apiary->only('id', 'name');
+            $nbHives = $apiary->hives()->count();
+            $honeyQuantityResponse = app('App\Http\Controllers\ApiaryController')->honeyQuantity($apiary->id);
+            $honeyQuantity = $honeyQuantityResponse->original['honeyQuantity'];
+            $location = $apiary->only('latitude', 'longitude');
+            $nbRucheActives = $apiary->hives()->where('status', 'in_use')->count();
+
+            return [
+                'id' => $idName['id'],
+                'name' => $idName['name'],
+                'nbHives' => $nbHives,
+                'honeyQuantity' => $honeyQuantity,
+                'location' => $location,
+                'nbRucheActives' => $nbRucheActives
+            ];
+        });
+
+        return response()->json($apiaryData);
     }
 
     public function hives(Request $request)

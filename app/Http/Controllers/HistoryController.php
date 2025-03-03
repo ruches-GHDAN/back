@@ -82,19 +82,21 @@ class HistoryController extends Controller
             $query->whereBetween('date', [$request->input('startDate'), $request->input('endDate')]);
         }
 
-        $history = $query->select(['title', 'date', 'description'])->get();
+        $history = $query->select(['title', 'date', 'description'])
+                         ->orderBy('date', 'desc')
+                         ->get();
 
         return response()->json($history);
     }
 
-    public function getHistoryByUser(Request $request, $idUser)
+    public function getHistoryByUser(Request $request)
     {
         $request->validate([
             'startDate' => 'nullable|date',
             'endDate' => 'nullable|date|after_or_equal:startDate',
         ]);
 
-        $query = User::findOrFail($idUser)->histories();
+        $query = User::findOrFail($request->user()->id)->histories();
 
         if ($request->has('startDate') && $request->has('endDate')) {
             $query->whereBetween('date', [$request->input('startDate'), $request->input('endDate')]);
