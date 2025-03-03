@@ -56,9 +56,9 @@ class UserController extends Controller
             ];
         });
 
-        return response()->json([
-            'hives' => $hiveData
-        ]);
+        return response()->json(
+            $hiveData
+        );
     }
 
 
