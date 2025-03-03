@@ -21,8 +21,14 @@ RUN apt-get install -y \
 WORKDIR /var/www/html
 COPY . /var/www/html
 
+# Réparer les permissions
+RUN chown -R www-data:www-data /var/www/html
+
 # Installer Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# Installer les dépendances via Composer
+RUN composer install --no-dev --optimize-autoloader --no-interaction
 
 # Exposer le port 9000 pour PHP-FPM
 EXPOSE 9000
