@@ -33,8 +33,6 @@ class UserController extends Controller
 
             $installDate = $transhumanceDate ? $transhumanceDate : $hive->created_at;
 
-            $hiveSize = $hive->size;
-
             $disease = $user->apiaries()
                 ->join('hives', 'apiaries.id', '=', 'hives.apiary_id')
                 ->join('disease_hive', 'hives.id', '=', 'disease_hive.hive_id')
@@ -46,19 +44,20 @@ class UserController extends Controller
             $status = $hive->status;
 
             return [
+                'id' => $hive->id,
                 'HiveRegistration' => $hiveRegistration,
                 'ApiaryName' => $apiaryName,
                 'InstallDate' => $installDate,
-                'HiveSize' => $hiveSize,
+                'HiveSize' => $hive->size,
                 'Disease' => $disease,
                 'QueenYear' => $queenYear,
                 'Status' => $status
             ];
         });
 
-        return response()->json([
-            'hives' => $hiveData
-        ]);
+        return response()->json(
+            $hiveData
+        );
     }
 
 
