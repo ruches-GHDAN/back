@@ -36,4 +36,8 @@ class Apiary extends Model
     {
         return $this->hasMany(Hive::class);
     }
+
+    public function histories(){
+        return $this->hasMany(History::class);
+    }
 }
