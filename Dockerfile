@@ -37,4 +37,5 @@ EXPOSE 8080
 COPY ./nginx/default.conf /etc/nginx/sites-available/default
 
 # Démarrer Nginx et PHP-FPM ensemble
-CMD php-fpm && nginx -g 'daemon off;'
+CMD /bin/bash -c "php-fpm & nginx -g 'daemon off;'"
+
