@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Apiary;
+use App\Models\History;
 use App\Models\User;
 use DateTime;
 use Illuminate\Http\JsonResponse;
@@ -28,6 +29,13 @@ class ApiaryController extends Controller
             'user_id' => Auth::id(),
         ]);
 
+        History::create([
+            'apiary_id' => $apiary->id,
+            'title' => 'Création de rucher',
+            'date' => now(),
+            'description' => "Le rucher {$apiary->name} a été créé.",
+        ]);
+
         return response()->json($apiary, 201);
     }
 
@@ -50,7 +58,18 @@ class ApiaryController extends Controller
             return response()->json(['message' => 'Vous n\'avez pas l\'autorisation'], 403);
         }
 
-        $apiary->update(array_filter($validatedData, fn($value) => !is_null($value)));
+        $filteredData = array_filter($validatedData, fn($value, $key) => !is_null($value) && $apiary->$key != $value, ARRAY_FILTER_USE_BOTH);
+
+        if (!empty($filteredData)) {
+            $apiary->update($filteredData);
+
+            History::create([
+                'apiary_id' => $apiary->id,
+                'title' => 'Modification de rucher',
+                'date' => now(),
+                'description' => "Le rucher {$apiary->name} a été modifié : " . implode(', ', array_map(fn($key, $value) => "$key : $value", array_keys($filteredData), $filteredData)),
+            ]);
+        }
 
         return response()->json($apiary);
     }
@@ -67,9 +86,16 @@ class ApiaryController extends Controller
             return response()->json(['message' => 'Vous n\'avez pas l\'autorisation'], 403);
         }
 
+        History::create([
+            'apiary_id' => $apiary->id,
+            'title' => 'Suppression de rucher',
+            'date' => now(),
+            'description' => "Le rucher {$apiary->name} a été supprimé.",
+        ]);
+
         $apiary->delete();
 
-        return response()->json(['message' => 'Le rucher a bien été supprimé'], 200);
+        return response()->json(['message' => 'Le rucher a bien été supprimé']);
     }
 
     public function about(int $idApiary): JsonResponse
