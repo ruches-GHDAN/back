@@ -76,11 +76,14 @@ class ApiaryController extends Controller
     {
         $apiary = Apiary::findOrFail($idApiary);
 
-        $nbHives = $this->nbHives($idApiary);
+        $nbHives = $this->nbHives($idApiary)->getData(true)['nbHives'];
+
+        $honeyQuantity = $this->honeyQuantity($idApiary)->getData(true)['honeyQuantity'];
 
         return response()->json([
             'apiary' => $apiary,
-            'nbHives' => $nbHives
+            'nbHives' => $nbHives,
+            'honeyQuantity' => $honeyQuantity
         ]);
     }
 
