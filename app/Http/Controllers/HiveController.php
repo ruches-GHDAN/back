@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\History;
 use App\Models\Hive;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -35,6 +36,13 @@ class HiveController extends Controller
             'apiary_id' => $validatedData['apiary_id'],
         ]);
 
+        History::create([
+            'apiary_id' => $hive->apiary->id,
+            'title' => 'Création de ruche',
+            'date' => now(),
+            'description' => "La ruche {$hive->registration} a été créée.",
+        ]);
+
         return response()->json($hive, 201);
     }
 
@@ -62,7 +70,18 @@ class HiveController extends Controller
             return response()->json(['message' => 'Vous n\'avez pas l\'autorisation'], 403);
         }
 
-        $hive->update(array_filter($validatedData, fn($value) => !is_null($value)));
+        $filteredData = array_filter($validatedData, fn($value, $key) => !is_null($value) && $hive->$key != $value, ARRAY_FILTER_USE_BOTH);
+
+        if (!empty($filteredData)) {
+            $hive->update($filteredData);
+
+            History::create([
+                'apiary_id' => $hive->apiary->id,
+                'title' => 'Modification de ruche',
+                'date' => now(),
+                'description' => "La ruche {$hive->registration} a été modifiée : " . implode(', ', array_map(fn($key, $value) => "$key : $value", array_keys($filteredData), $filteredData)),
+            ]);
+        }
 
         return response()->json($hive);
     }
@@ -79,9 +98,16 @@ class HiveController extends Controller
             return response()->json(['message' => 'Vous n\'avez pas l\'autorisation'], 403);
         }
 
+        History::create([
+            'apiary_id' => $hive->apiary->id,
+            'title' => 'Suppression de ruche',
+            'date' => now(),
+            'description' => "La ruche {$hive->registration} a été supprimée.",
+        ]);
+
         $hive->delete();
 
-        return response()->json(['message' => 'La ruche a bien été supprimée'], 200);
+        return response()->json(['message' => 'La ruche a bien été Suppression'], 200);
     }
     public function about(int $idHive): JsonResponse
     {
@@ -89,9 +115,12 @@ class HiveController extends Controller
 
         $apiary = $hive->apiary()->select(['id','name'])->firstOrFail();
 
+        $histories = History::where('apiary_id', $hive->apiary_id)->get();
+
         return response()->json([
             'hive' => $hive,
-            'apiary' => $apiary
+            'apiary' => $apiary,
+            'histories' => $histories
         ]);
     }
 

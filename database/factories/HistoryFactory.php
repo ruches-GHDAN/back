@@ -19,7 +19,7 @@ class HistoryFactory extends Factory
         return [
             'title' => $this->faker->word,
             'date' => $this->faker->date,
-            'description' => $this->faker->paragraph,
+            'description' => $this->faker->sentence,
         ];
     }
 }
