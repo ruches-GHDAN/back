@@ -9,6 +9,8 @@ class History extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['apiary_id', 'title', 'date', 'description'];
+
     public function apiary()
     {
         return $this->belongsTo(Apiary::class);
