@@ -37,4 +37,4 @@ EXPOSE 9000
 COPY ./nginx/default.conf /etc/nginx/sites-available/default
 
 # Démarrer Nginx et PHP-FPM ensemble
-CMD service nginx start && php-fpm && php artisan serve --host=0.0.0.0 --port=${PORT}
+CMD service nginx start && php-fpm
