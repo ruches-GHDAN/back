@@ -31,7 +31,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
 # Exposer le port 9000 pour PHP-FPM
-EXPOSE 8080
+EXPOSE 9000
 
 # Copier la configuration Nginx
 COPY ./nginx/default.conf /etc/nginx/sites-available/default
