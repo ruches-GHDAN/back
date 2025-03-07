@@ -38,9 +38,9 @@ class HiveController extends Controller
 
         History::create([
             'apiary_id' => $hive->apiary->id,
-            'title' => 'Création de ruche',
+            'title' => 'Ruche créée',
             'date' => now(),
-            'description' => "La ruche {$hive->registration} a été créée.",
+            'description' => "Immatriculation : {$hive->registration} \nRucher : {$hive->apiary->name}",
         ]);
 
         return response()->json($hive, 201);
@@ -77,9 +77,9 @@ class HiveController extends Controller
 
             History::create([
                 'apiary_id' => $hive->apiary->id,
-                'title' => 'Modification de ruche',
+                'title' => 'Ruche modifiée',
                 'date' => now(),
-                'description' => "La ruche {$hive->registration} a été modifiée : " . implode(', ', array_map(fn($key, $value) => "$key : $value", array_keys($filteredData), $filteredData)),
+                'description' => "Ruche : {$hive->registration} \nRucher : {$hive->apiary->name} \nDonnées modifiées : " . implode(', ', array_map(fn($key, $value) => "$key : $value", array_keys($filteredData), $filteredData)),
             ]);
         }
 
@@ -100,14 +100,14 @@ class HiveController extends Controller
 
         History::create([
             'apiary_id' => $hive->apiary->id,
-            'title' => 'Suppression de ruche',
+            'title' => 'Ruche supprimée',
             'date' => now(),
-            'description' => "La ruche {$hive->registration} a été supprimée.",
+            'description' => "Ruche :{$hive->registration} \nRucher : {$hive->apiary->name}",
         ]);
 
         $hive->delete();
 
-        return response()->json(['message' => 'La ruche a bien été Suppression'], 200);
+        return response()->json(['message' => 'La ruche a bien été supprimée']);
     }
     public function about(int $idHive): JsonResponse
     {

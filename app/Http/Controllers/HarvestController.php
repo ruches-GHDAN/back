@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\History;
 use Illuminate\Http\Request;
 use App\Models\Harvest;
 use Illuminate\Support\Facades\Auth;
@@ -20,6 +21,13 @@ class HarvestController extends Controller
             'date' => $validatedData['date'],
             'quantity' => $validatedData['quantity'],
             'apiary_id' => $validatedData['apiary_id'],
+        ]);
+
+        History::create([
+            'apiary_id' => $harvest->apiary_id,
+            'title' => 'Récolte créée',
+            'date' => $harvest->date,
+            'description' => "Récolte : {$harvest->quantity} kg \nRucher : {$harvest->apiary->name}",
         ]);
 
         return response()->json($harvest, 201);
@@ -43,7 +51,17 @@ class HarvestController extends Controller
             return response()->json(['message' => 'Vous n\'avez pas l\'autorisation'], 403);
         }
 
-        $harvest->update(array_filter($validatedData, fn($value) => !is_null($value)));
+        $filteredData = array_filter($validatedData, fn($value, $key) => !is_null($value) && $harvest->$key != $value, ARRAY_FILTER_USE_BOTH);
+        if (!empty($filteredData)) {
+            $harvest->update($filteredData);
+
+            History::create([
+                'apiary_id' => $harvest->apiary->id,
+                'title' => 'Récolte modifiée',
+                'date' => now(),
+                'description' => "Récolte : {$harvest->quantity} kg \nRucher : {$harvest->apiary->name} \nDonnées modifiées : " . implode(', ', array_map(fn($key, $value) => "$key : $value", array_keys($filteredData), $filteredData)),
+            ]);
+        }
 
         return response()->json($harvest);
     }
@@ -59,6 +77,13 @@ class HarvestController extends Controller
         if ($harvest->apiary->user_id !== Auth::id()) {
             return response()->json(['message' => 'Vous n\'avez pas l\'autorisation'], 403);
         }
+
+        History::create([
+            'apiary_id' => $harvest->apiary->id,
+            'title' => 'Récolte supprimée',
+            'date' => now(),
+            'description' => "Récolte : {$harvest->quantity} kg \nRucher : {$harvest->apiary->name} \nDonnées modifiées : " . implode(', ', array_map(fn($key, $value) => "$key : $value", array_keys($filteredData), $filteredData)),
+        ]);
 
         $harvest->delete();
 

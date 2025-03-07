@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Disease;
+use App\Models\History;
+use App\Models\Hive;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -28,6 +30,16 @@ class DiseaseController extends Controller
 
         $disease->hives()->attach($validatedData['hives']);
 
+        foreach ($validatedData['hives'] as $hiveId) {
+            $hive = Hive::find($hiveId);
+            History::create([
+                'apiary_id' => $hive->apiary_id,
+                'title' => 'Maladie détectée',
+                'date' => now(),
+                'description' => "Maladie : {$disease->type} \nRuche : {$hive->registration} \nRucher : {$hive->apiary->name}",
+            ]);
+        }
+
         return response()->json($disease, 201);
     }
 
@@ -50,7 +62,18 @@ class DiseaseController extends Controller
             return response()->json(['message' => 'Vous n\'avez pas l\'autorisation'], 403);
         }
 
-        $disease->update(array_filter($validatedData, fn($value) => !is_null($value)));
+        $filteredData = array_filter($validatedData, fn($value, $key) => !is_null($value) && $disease->$key != $value, ARRAY_FILTER_USE_BOTH);
+
+        if (!empty($filteredData)) {
+            $disease->update($filteredData);
+            $hive = $disease->hives()->first();
+            History::create([
+                'apiary_id' => $hive->apiary->id,
+                'title' => 'Maladie modifiée',
+                'date' => now(),
+                'description' => "Maladie : {$disease->type} \nRuche : {$hive->registration} \nRucher : {$hive->apiary->name} \nDonnées modifiées : " . implode(', ', array_map(fn($key, $value) => "$key : $value", array_keys($filteredData), $filteredData)),
+            ]);
+        }
 
         return response()->json($disease);
     }
@@ -67,8 +90,16 @@ class DiseaseController extends Controller
             return response()->json(['message' => 'Vous n\'avez pas l\'autorisation'], 403);
         }
 
+        $hive = $disease->hives()->first();
+        History::create([
+            'apiary_id' => $hive->apiary->id,
+            'title' => 'Maladie supprimée',
+            'date' => now(),
+            'description' => "Maladie : {$disease->type} \nRuche : {$hive->registration} \nRucher : {$hive->apiary->name}",
+        ]);
+
         $disease->delete();
 
-        return response()->json(['message' => 'La maladie a bien été supprimée'], 200);
+        return response()->json(['message' => 'La maladie a bien été supprimée']);
     }
 }
