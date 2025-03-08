@@ -31,9 +31,9 @@ class ApiaryController extends Controller
 
         History::create([
             'apiary_id' => $apiary->id,
-            'title' => 'Création de rucher',
+            'title' => 'Rucher créé',
             'date' => now(),
-            'description' => "Le rucher {$apiary->name} a été créé.",
+            'description' => "Rucher : {$apiary->name}",
         ]);
 
         return response()->json($apiary, 201);
@@ -65,9 +65,9 @@ class ApiaryController extends Controller
 
             History::create([
                 'apiary_id' => $apiary->id,
-                'title' => 'Modification de rucher',
+                'title' => "Rucher modifié",
                 'date' => now(),
-                'description' => "Le rucher {$apiary->name} a été modifié : " . implode(', ', array_map(fn($key, $value) => "$key : $value", array_keys($filteredData), $filteredData)),
+                'description' => "Rucher : {$apiary->name} \nNouvelles données : " . implode(', ', array_map(fn($key, $value) => "$key : $value", array_keys($filteredData), $filteredData)),
             ]);
         }
 
@@ -88,9 +88,9 @@ class ApiaryController extends Controller
 
         History::create([
             'apiary_id' => $apiary->id,
-            'title' => 'Suppression de rucher',
+            'title' => "Rucher supprimé",
             'date' => now(),
-            'description' => "Le rucher {$apiary->name} a été supprimé.",
+            'description' => "Rucher : {$apiary->name}",
         ]);
 
         $apiary->delete();

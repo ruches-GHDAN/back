@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\History;
 use App\Models\Transhumance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -24,6 +25,13 @@ class TranshumanceController extends Controller
             'oldLatitude' => $validatedData['oldLatitude'],
             'oldLongitude' => $validatedData['oldLongitude'],
             'apiary_id' => $validatedData['apiary_id'],
+        ]);
+
+        History::create([
+            'apiary_id' => $transhumance->apiary_id,
+            'title' => 'Transhumance créée',
+            'date' => $transhumance->date,
+            'description' => "Transhumance : {$transhumance->reason} \nRucher : {$transhumance->apiary->name}",
         ]);
 
         return response()->json($transhumance, 201);
@@ -49,7 +57,17 @@ class TranshumanceController extends Controller
             return response()->json(['message' => 'Vous n\'avez pas l\'autorisation'], 403);
         }
 
-        $transhumance->update(array_filter($validatedData, fn($value) => !is_null($value)));
+        $filteredData = array_filter($validatedData, fn($value, $key) => !is_null($value) && $transhumance->$key != $value, ARRAY_FILTER_USE_BOTH);
+        if (!empty($filteredData)) {
+            $transhumance->update($filteredData);
+
+            History::create([
+                'apiary_id' => $transhumance->apiary->id,
+                'title' => 'Transhumance modifiée',
+                'date' => now(),
+                'description' => "Transhumance : {$transhumance->reason} \nRucher : {$transhumance->apiary->name} \nDonnées modifiées : " . implode(', ', array_map(fn($key, $value) => "$key : $value", array_keys($filteredData), $filteredData)),
+            ]);
+        }
 
         return response()->json($transhumance);
     }
@@ -66,8 +84,15 @@ class TranshumanceController extends Controller
             return response()->json(['message' => 'Vous n\'avez pas l\'autorisation'], 403);
         }
 
+        History::create([
+            'apiary_id' => $transhumance->apiary_id,
+            'title' => 'Transhumance supprimée',
+            'date' => now(),
+            'description' => "Transhumance : {$transhumance->reason} \nRucher : {$transhumance->apiary->name}",
+        ]);
+
         $transhumance->delete();
 
-        return response()->json(['message' => 'La transhumance a bien été supprimée'], 200);
+        return response()->json(['message' => 'La transhumance a bien été supprimée']);
     }
 }

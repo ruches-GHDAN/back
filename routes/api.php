@@ -9,6 +9,7 @@ use App\Http\Controllers\WeatherController;
 use App\Http\Controllers\HarvestController;
 use App\Http\Controllers\TranshumanceController;
 use App\Http\Controllers\DiseaseController;
+use App\Http\Controllers\FoodController;
 use App\Http\Controllers\HistoryController;
 
 define('AUTH', 'auth:sanctum');
@@ -73,6 +74,12 @@ Route::group(['prefix' => 'disease', 'middleware' => AUTH], function () {
     Route::post(CREATE_ROUTE, [DiseaseController::class, 'create']);
     Route::patch(UPDATE_ROUTE, [DiseaseController::class, 'update']);
     Route::delete(DELETE_ROUTE, [DiseaseController::class, 'delete']);
+});
+
+Route::group(['prefix' => 'food', 'middleware' => AUTH], function () {
+    Route::post(CREATE_ROUTE, [FoodController::class, 'create']);
+    Route::patch(UPDATE_ROUTE, [FoodController::class, 'update']);
+    Route::delete(DELETE_ROUTE, [FoodController::class, 'delete']);
 });
 
 Route::group(['prefix' => 'dashboard', 'middleware' => AUTH], function () {
